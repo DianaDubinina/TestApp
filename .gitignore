@@ -1,5 +1,4 @@
-*.iml
-.gradle
+
 /local.properties
 /.idea/caches
 /.idea/libraries
@@ -8,8 +7,35 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
-/build
 /captures
 .externalNativeBuild
 .cxx
 local.properties
+
+# Compiled output
+dist/
+tmp/
+out-tsc/
+bazel-out/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Android
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+*.DS_Store
+
+# Kotlin
+*.kotlin_module
+*.iml
+.idea/
+
+# Gradle
+.gradle/
+build/
