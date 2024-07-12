@@ -88,7 +88,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.constraintlayout)
     implementation ("io.reactivex.rxjava3:rxkotlin:3.0.0")
-//    implementation(libs.figma)
         implementation   ("com.airbnb.android:lottie:3.7.0")
 
     testImplementation(libs.junit)

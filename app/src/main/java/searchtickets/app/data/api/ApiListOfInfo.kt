@@ -10,8 +10,3 @@ data class ApiListOfInfo(
     @field:Json(name = "town") val town: String,
     @field:Json(name = "price") val price: Price
 )
-
-@JsonClass(generateAdapter = true)
-data class Price(
-    @field:Json(name = "value") val value: Int
-)
