@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SearchTicketsApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tickets">tickets</string>
+    <string name="hotels">hotels</string>
+    <string name="shortly">shortly</string>
+    <string name="subscriptions">subscriptions</string>
+    <string name="profile">profile</string>
+    <string name="search_text">Поиск дешевых\nавиабилетов</string>
+    <string name="exit">Quit?</string>
+    <string name="question_exit">Are you sure, you want to quit?</string>
+    <string name="possitive">Yes</string>
+    <string name="negative">No</string>
+</resources>
