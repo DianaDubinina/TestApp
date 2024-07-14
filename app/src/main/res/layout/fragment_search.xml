@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/BaseConstraintContainerStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/gray_2"
+    tools:context=".presentation.ui.fragments.SearchFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        style="@style/BaseConstraintContainerStyle"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/tab_rectangle"
+        android:elevation="20dp"
+        android:translationZ="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/back_butt"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/tp"
+            android:src="@drawable/ic_arrow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/from_city"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/tp"
+            android:hint="Откуда - Минск"
+            android:textColorHint="@color/gray_6"
+            app:boxStrokeWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintStart_toStartOf="@+id/view"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/from_city_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textColor="@color/white" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/to_city"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/tp"
+            android:hint="Куда - Турция"
+            android:textColorHint="@color/gray_6"
+            app:boxStrokeWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/from_city"
+            app:layout_constraintStart_toStartOf="@+id/view"
+            app:layout_constraintTop_toBottomOf="@+id/from_city">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/to_city_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textColor="@color/white" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <View
+            android:id="@+id/view"
+            style="@style/CardViewStyle"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/gray_6"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/back_butt"
+            app:layout_constraintTop_toTopOf="parent"></View>
+
+        <ImageView
+            android:id="@+id/change_butt"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/tp"
+            android:src="@drawable/ic_change"
+            app:layout_constraintBottom_toBottomOf="@+id/from_city"
+            app:layout_constraintEnd_toEndOf="@+id/to_city"
+            app:layout_constraintTop_toTopOf="@+id/from_city"
+            app:layout_constraintVertical_bias="0.466" />
+
+
+        <ImageView
+            android:id="@+id/close_button"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/tp"
+            android:src="@drawable/ic_close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/to_city"
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            app:layout_constraintVertical_bias="0.466" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/date_back"
+        style="@style/MaterialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="обратно"
+        android:textColor="@color/white"
+        app:icon="@drawable/ic_plus"
+        app:iconTint="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/date_departure"
+        style="@style/MaterialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="11 июля, сб"
+        android:textColor="@color/white"
+        app:iconTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/date_back"
+        app:layout_constraintStart_toEndOf="@+id/date_back"
+        app:layout_constraintTop_toTopOf="@+id/date_back" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/class_butt"
+        style="@style/MaterialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="1, эконом"
+        android:textColor="@color/white"
+        app:icon="@drawable/ic_human"
+        app:iconTint="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/date_departure"
+        app:layout_constraintTop_toTopOf="@+id/date_departure" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/fillters_butt"
+        style="@style/MaterialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="фильтр"
+        android:textColor="@color/white"
+        app:icon="@drawable/ic_settings"
+        app:iconTint="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/class_butt"
+        app:layout_constraintTop_toTopOf="@+id/class_butt" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rc_constraint"
+        style="@style/BaseConstraintContainerStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tab_rectangle"
+        android:elevation="20dp"
+        android:translationZ="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/date_departure">
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="Прямые рейсы"
+            android:textColor="@color/white"
+            android:textSize="22dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/flights_recycler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/textView9"
+            app:layout_constraintStart_toStartOf="@+id/textView9"
+            app:layout_constraintTop_toBottomOf="@+id/textView9"
+            tools:itemCount="3"
+            tools:listitem="@layout/info_flights" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:text="Показать все"
+            android:textColor="@color/blue"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/flights_recycler"
+            app:layout_constraintStart_toStartOf="@+id/flights_recycler"
+            app:layout_constraintTop_toBottomOf="@+id/flights_recycler"></TextView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/show_all"
+        style="@style/MaterialButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/blue"
+        android:gravity="center"
+        android:text="Показать все билеты"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/rc_constraint"
+        app:layout_constraintStart_toStartOf="@+id/rc_constraint"
+        app:layout_constraintTop_toBottomOf="@+id/rc_constraint" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
