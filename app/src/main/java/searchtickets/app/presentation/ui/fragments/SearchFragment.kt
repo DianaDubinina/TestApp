@@ -1,27 +1,30 @@
 package searchtickets.app.presentation.ui.fragments
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
 import android.text.InputType
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import searchtickets.app.R
 import searchtickets.app.databinding.FragmentSearchBinding
+import searchtickets.app.presentation.ui.adapters.FlightsAdapter
 import searchtickets.app.presentation.ui.adapters.FlightsAdapterDataSource
 import searchtickets.app.presentation.ui.adapters.FlightsAdapterDataSourceImpl
-import searchtickets.app.presentation.ui.adapters.FllightsAdapter
+import searchtickets.app.presentation.ui.utils.AppTextWatcher
+import searchtickets.app.presentation.ui.utils.DatePickerManager
 import searchtickets.app.presentation.ui.utils.FragmentsHolder
+import searchtickets.app.presentation.ui.utils.LastValueManager
 import searchtickets.app.presentation.ui.viewModels.FlightsViewModel
 
+@AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
@@ -29,7 +32,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private lateinit var adapterDataSource: FlightsAdapterDataSource
 
     private val viewModel: FlightsViewModel by activityViewModels()
-    private lateinit var adapter: FllightsAdapter
+    private lateinit var adapter: FlightsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,49 +46,53 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        viewModel.fetchData(requireContext())
+        viewModel.fetchData()
         updateData()
         initUi()
     }
 
     private fun initUi() {
         configureTextFields()
-        showAdditionalInfo()
         saveLastDepartureValue()
+        setupDatePickers()
+        navigateToAllFragment()
+    }
+
+    private fun setupDatePickers() {
+        val datePickerManager = DatePickerManager(
+            requireContext(),
+            binding.dateDeparture,
+            binding.dateBack
+        )
+        datePickerManager.setupDatePicker()
+        datePickerManager.initDateBackButton()
     }
 
     private fun saveLastDepartureValue() {
         with(binding) {
             val sharedPrefs = context?.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
             val lastDepartureValue = sharedPrefs?.getString("last_departure_value", "Москва")
+            val lastArrivalValue = LastValueManager.getLastArrivalValue(requireContext())
             fromCityEdit.setText(lastDepartureValue)
-
-            fromCityEdit.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                    sharedPrefs?.edit()?.putString("last_departure_value", s.toString())?.apply()
-                }
-
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            toCityEdit.setText(lastArrivalValue)
+            fromCityEdit.addTextChangedListener(AppTextWatcher { editable ->
+                sharedPrefs?.edit()?.putString("last_departure_value", editable.toString())?.apply()
             })
+            toCityEdit.addTextChangedListener(AppTextWatcher { editable ->
+                LastValueManager.saveLastArrivalValue(requireContext(), editable.toString())
+            })
+            binding.changeButt.setOnClickListener {
+                val fromText = fromCityEdit.text.toString()
+                val toText = toCityEdit.text.toString()
+                fromCityEdit.setText(toText)
+                toCityEdit.setText(fromText)
+            }
         }
     }
 
-    private fun showAdditionalInfo() {
-        binding.toCityEdit.setOnClickListener {
-            val dialog = AlertDialog.Builder(context)
-                .setTitle("Information")
-                .setMessage("Тут может быть инфо о дате и времени отправления")
-                .setPositiveButton("OK") { _, _ -> }
-                .create()
-            dialog.show()
+    private fun navigateToAllFragment() {
+        binding.showAll.setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_showAllFragment)
         }
     }
 
@@ -108,7 +115,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun setupRecyclerView() {
         adapterDataSource = FlightsAdapterDataSourceImpl(viewModel)
-        adapter = FllightsAdapter(adapterDataSource)
+        adapter = FlightsAdapter(adapterDataSource)
         binding.flightsRecycler.adapter = adapter
         binding.flightsRecycler.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

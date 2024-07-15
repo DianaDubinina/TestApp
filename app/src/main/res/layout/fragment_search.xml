@@ -12,7 +12,7 @@
         android:id="@+id/constraintLayout"
         style="@style/BaseConstraintContainerStyle"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="52dp"
         android:layout_marginEnd="20dp"
@@ -40,13 +40,13 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/from_city"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:background="@color/tp"
             android:hint="Откуда - Минск"
             android:textColorHint="@color/gray_6"
             app:boxStrokeWidth="0dp"
             app:layout_constraintBottom_toBottomOf="@+id/view"
-            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintEnd_toStartOf="@+id/change_butt"
             app:layout_constraintStart_toStartOf="@+id/view"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -55,6 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
+                android:digits="йцукенгшщзхъэждлорпавыфячсмитьбю.-_"
                 android:textColor="@color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -62,7 +63,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/to_city"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:background="@color/tp"
             android:hint="Куда - Турция"
             android:textColorHint="@color/gray_6"
@@ -77,6 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
+                android:digits="йцукенгшщзхъэждлорпавыфячсмитьбю.-_"
                 android:textColor="@color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,32 +92,30 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/back_butt"
-            app:layout_constraintTop_toTopOf="parent"></View>
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <ImageView
             android:id="@+id/change_butt"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginEnd="10dp"
             android:background="@color/tp"
+            android:layout_marginEnd="20dp"
             android:src="@drawable/ic_change"
-            app:layout_constraintBottom_toBottomOf="@+id/from_city"
-            app:layout_constraintEnd_toEndOf="@+id/to_city"
-            app:layout_constraintTop_toTopOf="@+id/from_city"
-            app:layout_constraintVertical_bias="0.466" />
-
+            app:layout_constraintBottom_toBottomOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/close_button"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginEnd="10dp"
             android:background="@color/tp"
             android:src="@drawable/ic_close"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/to_city"
-            app:layout_constraintTop_toBottomOf="@+id/view"
-            app:layout_constraintVertical_bias="0.466" />
+            app:layout_constraintBottom_toBottomOf="@+id/to_city"
+            app:layout_constraintEnd_toEndOf="@+id/change_butt"
+            app:layout_constraintStart_toEndOf="@+id/to_city"
+            app:layout_constraintTop_toBottomOf="@+id/from_city" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -175,6 +175,7 @@
         android:id="@+id/rc_constraint"
         style="@style/BaseConstraintContainerStyle"
         android:layout_width="0dp"
+        android:layout_marginTop="5dp"
         android:layout_height="wrap_content"
         android:background="@drawable/tab_rectangle"
         android:elevation="20dp"
@@ -207,19 +208,6 @@
             tools:itemCount="3"
             tools:listitem="@layout/info_flights" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="center"
-            android:text="Показать все"
-            android:textColor="@color/blue"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/flights_recycler"
-            app:layout_constraintStart_toStartOf="@+id/flights_recycler"
-            app:layout_constraintTop_toBottomOf="@+id/flights_recycler"></TextView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

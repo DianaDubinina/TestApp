@@ -5,5 +5,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ResponseFlights(
-    @field:Json(name = "offers") val offers: List<ApiListOfFlights>
+    @field:Json(name = "tickets_offers") val offers: List<ApiListOfFlights>
 )

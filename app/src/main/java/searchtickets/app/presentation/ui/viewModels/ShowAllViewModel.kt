@@ -7,18 +7,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import searchtickets.app.domain.models.Flights
-import searchtickets.app.domain.usecases.GetFlightsUseCase
+import searchtickets.app.domain.models.All
+import searchtickets.app.domain.usecases.GetAllUseCase
 import searchtickets.app.presentation.ui.state.ErrorState
 import searchtickets.app.presentation.ui.state.LoadingState
 import javax.inject.Inject
 
 @HiltViewModel
-class FlightsViewModel @Inject constructor(
-    private val getFlightIsUseCase: GetFlightsUseCase
+class ShowAllViewModel @Inject constructor(
+    private val getAlltIsUseCase: GetAllUseCase
 ) : ViewModel() {
-    private val _info = MutableLiveData<List<Flights>>()
-    val info: LiveData<List<Flights>> = _info
+    private val _info = MutableLiveData<List<All>>()
+    val info: LiveData<List<All>> = _info
 
     private val _loadingState = LoadingState()
     val loadingState: LoadingState = _loadingState
@@ -28,19 +28,19 @@ class FlightsViewModel @Inject constructor(
 
     fun fetchData() {
         val id =
-            "https://drive.usercontent.google.com/u/0/uc?id=13WhZ5ahHBwMiHRXxWPq-bYlRVRwAujta&export=download"
+            "https://drive.google.com/uc?export=download&id=1HogOsz4hWkRwco4kud3isZHFQLUAwNBA"
         _loadingState.Loading.value = true
         viewModelScope.launch {
             try {
-                val list = getFlightIsUseCase.invoke(id)
+                val list = getAlltIsUseCase.invoke(id)
                 _info.value = list
                 _loadingState.Loading.value = false
-                Log.d("FlightsViewModel", "Data updated: $list")
+                Log.d("ShowAllViewModel", "Data updated: $list")
 
             } catch (e: Exception) {
                 _loadingState.Loading.value = false
                 _errorState.getNoAvailableDialog.value = true
-                Log.e("FETCH_FLIGHTS_ERROR", "An error occurred: ${e.message}")
+                Log.e("FETCH_SHOW_ERROR", "An error occurred: ${e.message}")
             }
         }
     }

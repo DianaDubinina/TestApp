@@ -5,56 +5,75 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import searchtickets.app.R
+import searchtickets.app.databinding.FragmentShowAllBinding
+import searchtickets.app.presentation.ui.adapters.ShowAllAdapter
+import searchtickets.app.presentation.ui.adapters.ShowAllAdapterDataSource
+import searchtickets.app.presentation.ui.adapters.ShowAllAdapterDataSourceImpl
+import searchtickets.app.presentation.ui.utils.DateTimeConverterImpl
+import searchtickets.app.presentation.ui.utils.LastValueManager
+import searchtickets.app.presentation.ui.viewModels.ShowAllViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+@AndroidEntryPoint
+class ShowAllFragment : Fragment(R.layout.fragment_show_all) {
+    private var _binding: FragmentShowAllBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: ShowAllViewModel by activityViewModels()
+    private lateinit var adapterDataSource: ShowAllAdapterDataSource
+    private lateinit var adapter: ShowAllAdapter
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ShowAllFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ShowAllFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentShowAllBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val dateTimeConverter = DateTimeConverterImpl()
+        adapterDataSource = ShowAllAdapterDataSourceImpl(viewModel)
+        adapter = ShowAllAdapter(adapterDataSource, dateTimeConverter)
+        setupRecyclerView()
+        viewModel.fetchData()
+        viewModel.info.observe(viewLifecycleOwner) { tickets ->
+            adapter.updateData(tickets)
+        }
+        initClickListener()
+        restoreLastValue()
+    }
+
+    private fun restoreLastValue() {
+        with(binding) {
+            val lastDepartureValue = LastValueManager.getLastDepartureValue(requireContext())
+            val lastArrivalValue = LastValueManager.getLastArrivalValue(requireContext())
+            binding.wayFrom.text = "$lastDepartureValue-"
+            binding.wayTo.text = lastArrivalValue
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_show_all, container, false)
+
+    private fun initClickListener() {
+        binding.back.setOnClickListener {
+            findNavController().navigate(R.id.action_showAllFragment_to_searchFragment)
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ShowAllFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ShowAllFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun setupRecyclerView() {
+        binding.showAll.adapter = adapter
+        binding.showAll.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

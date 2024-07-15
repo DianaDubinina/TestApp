@@ -1,4 +1,3 @@
-
 //plugins {
 //    id("com.android.application")
 //    id("org.jetbrains.kotlin.android")
@@ -58,16 +57,6 @@ android {
     }
 }
 
-//dependencies {
-//
-//    implementation("androidx.core:core-ktx:1.12.0")
-//    implementation("androidx.appcompat:appcompat:1.6.1")
-//    implementation("com.google.android.material:material:1.11.0")
-//    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-//    testImplementation("junit:junit:4.13.2")
-//    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-//    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-//}
 dependencies {
     implementation(libs.fragment.ktx)
     implementation(libs.navigation.fragment.ktx)
@@ -87,14 +76,16 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
-    implementation ("io.reactivex.rxjava3:rxkotlin:3.0.0")
-        implementation   ("com.airbnb.android:lottie:3.7.0")
+    implementation("io.reactivex.rxjava3:rxkotlin:3.0.0")
+    implementation("com.airbnb.android:lottie:3.7.0")
+
+    implementation("com.hannesdorfmann:adapterdelegates4:4.3.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation ("com.github.bumptech.glide:glide:4.12.0")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
-    implementation ("com.getkeepsafe.taptargetview:taptargetview:1.13.3")
-    implementation ("com.google.code.gson:gson:2.10")
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+    implementation("com.getkeepsafe.taptargetview:taptargetview:1.13.3")
+    implementation("com.google.code.gson:gson:2.10")
 }

@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import searchtickets.app.R
 import searchtickets.app.databinding.FragmentEmptyBinding
 import searchtickets.app.presentation.ui.utils.FragmentsHolder
 
+@AndroidEntryPoint
 class EmptyFragment : Fragment(R.layout.fragment_empty) {
     private var _binding: FragmentEmptyBinding? = null
     private val binding get() = _binding!!
