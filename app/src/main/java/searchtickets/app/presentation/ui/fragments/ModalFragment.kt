@@ -1,20 +1,26 @@
 package searchtickets.app.presentation.ui.fragments
 
+import android.content.res.Configuration
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
+import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import searchtickets.app.R
 import searchtickets.app.databinding.FragmentModalBinding
 import searchtickets.app.presentation.ui.adapters.ImagesAdapter
 import searchtickets.app.presentation.ui.adapters.ImagesAdapterDataSource
+import searchtickets.app.presentation.ui.utils.AppTextWatcher
 import searchtickets.app.presentation.ui.utils.FragmentsHolder
+import searchtickets.app.presentation.ui.utils.LastValueManager
 import searchtickets.app.presentation.ui.viewModels.InfoViewModel
 
+@AndroidEntryPoint
 class ModalFragment : Fragment(R.layout.fragment_modal) {
     private var _binding: FragmentModalBinding? = null
     private val binding get() = _binding!!
@@ -35,38 +41,84 @@ class ModalFragment : Fragment(R.layout.fragment_modal) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        setupRecyclerView()
-        viewModel.fetchData(requireContext())
-        updateData()
+        viewModel.fetchData()
         initUi()
+        restoreLastValue()
+        saveLastValue()
     }
 
-    private fun initUi() {
-        clickListener()
-
-    }
-
-    private fun clickListener() {
-        binding.closeButton.setOnClickListener {
-            binding.toCityEdit.setText("")
+    private fun restoreLastValue() {
+        with(binding) {
+            val lastDepartureValue = LastValueManager.getLastDepartureValue(requireContext())
+            val lastArrivalValue = LastValueManager.getLastArrivalValue(requireContext())
+            fromCityEdit.setText(lastDepartureValue)
+            toCityEdit.setText(lastArrivalValue)
         }
     }
 
-    private fun updateData() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.info.observe(viewLifecycleOwner) { newItems ->
-                adapter.updateData(newItems)
+    private fun saveLastValue() {
+        with(binding) {
+            val lastDepartureValue = LastValueManager.getLastDepartureValue(requireContext())
+            val lastArrivalValue = LastValueManager.getLastArrivalValue(requireContext())
+            fromCityEdit.setText(lastDepartureValue)
+            toCityEdit.setText(lastArrivalValue)
+            fromCityEdit.addTextChangedListener(AppTextWatcher { editable ->
+                LastValueManager.saveLastDepartureValue(requireContext(), editable.toString())
+            })
+            toCityEdit.addTextChangedListener(AppTextWatcher { editable ->
+                LastValueManager.saveLastArrivalValue(requireContext(), editable.toString())
+            })
+        }
+    }
+
+    private fun initUi() {
+        configureTextFields()
+        clickListener()
+    }
+
+    private fun configureTextFields() {
+        with(binding) {
+            toCityEdit.apply {
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+                imeOptions = EditorInfo.IME_ACTION_DONE
+                setRawInputType(Configuration.KEYBOARD_QWERTY or InputType.TYPE_TEXT_VARIATION_PERSON_NAME)
+            }
+            fromCityEdit.apply {
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+                imeOptions = EditorInfo.IME_ACTION_DONE
+                setRawInputType(Configuration.KEYBOARD_QWERTY or InputType.TYPE_TEXT_VARIATION_PERSON_NAME)
             }
         }
     }
 
-//    private fun setupRecyclerView() {
-//        adapterDataSource = ImagesAdapterDataSourceImpl(viewModel)
-//        adapter = ImagesAdapter(adapterDataSource)
-//        binding.adsRecycler.adapter = adapter
-//        binding.adsRecycler.layoutManager =
-//            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-//    }
+    private fun clickListener() {
+        with(binding) {
+            clearButt.setOnClickListener { toCityEdit.setText("") }
+            greenButt.setOnClickListener { navigateToEmptyFragment() }
+            blueButt.setOnClickListener { toCityEdit.setText("Куда угодно") }
+            dblueButt.setOnClickListener { navigateToEmptyFragment() }
+            redButt.setOnClickListener { navigateToEmptyFragment() }
+            istanbul.setOnClickListener { handleDestinationInput("Стамбул") }
+            sochi.setOnClickListener { handleDestinationInput("Сочи") }
+            phuket.setOnClickListener { handleDestinationInput("Пхукет") }
+
+        }
+    }
+
+    private fun handleDestinationInput(destination: String) {
+        binding.toCityEdit.setText(destination)
+        if (binding.toCityEdit.text != null) {
+            navigateToFragment()
+        }
+    }
+
+    private fun navigateToFragment() {
+        findNavController().navigate(R.id.action_modalFragment_to_searchFragment)
+    }
+
+    private fun navigateToEmptyFragment() {
+        findNavController().navigate(R.id.action_modalFragment_to_emptyFragment)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

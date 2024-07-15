@@ -11,12 +11,15 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import searchtickets.app.data.api.ApiConst.BASE_URL
+import searchtickets.app.data.mappers.ApiAllToAllMapper
 import searchtickets.app.data.mappers.ApiFlightsToFlightsMapper
 import searchtickets.app.data.mappers.ApiInfoToInfoMapper
 import searchtickets.app.data.repositories.FlightsRepositoryImpl
 import searchtickets.app.data.repositories.ImagesRepositoryImpl
+import searchtickets.app.data.repositories.ShowAllRepositoryImpl
 import searchtickets.app.domain.repositories.FlightsRepository
 import searchtickets.app.domain.repositories.ImagesRepository
+import searchtickets.app.domain.repositories.ShowAllRepository
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -80,6 +83,17 @@ object ApiModule {
 
     @Singleton
     @Provides
+    fun provideAllApi(okHttpClient: OkHttpClient, moshi: Moshi): ShowAllApi {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+            .create(ShowAllApi::class.java)
+    }
+
+    @Singleton
+    @Provides
     fun providesHotelsRepository(
         imagesApi: ImagesApi,
         hotelsMapper: ApiInfoToInfoMapper
@@ -94,5 +108,14 @@ object ApiModule {
         flightsMapper: ApiFlightsToFlightsMapper
     ): FlightsRepository {
         return FlightsRepositoryImpl(flightsApi, flightsMapper)
+    }
+
+    @Singleton
+    @Provides
+    fun providesShowAllRepository(
+        showAllApi: ShowAllApi,
+        mapper: ApiAllToAllMapper
+    ): ShowAllRepository {
+        return ShowAllRepositoryImpl(showAllApi, mapper)
     }
 }

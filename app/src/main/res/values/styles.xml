@@ -32,6 +32,17 @@
         <item name="cornerSize">8dp</item>
     </style>
 
+    <style name="CardWthMargin">
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/tab_rectangle</item>
+
+    </style>
+
     <style name="MaterialButton">
         <item name="android:shadowColor">@color/black</item>
         <item name="android:shadowDx">2</item>

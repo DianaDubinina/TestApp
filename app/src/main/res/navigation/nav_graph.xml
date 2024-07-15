@@ -3,41 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="searchtickets.app.presentation.ui.MainActivity"
-        android:label="MainActivity"
-        tools:layout="@layout/activity_main">
-        <action
-            android:id="@+id/action_mainActivity_to_emptyFragment"
-            app:destination="@id/emptyFragment" />
-    </activity>
-
-    <fragment
-        android:id="@+id/mainFragment"
-        android:name="searchtickets.app.presentation.ui.fragments.MainFragment"
-        android:label="MainFragment"
-        tools:layout="@layout/fragment_main">
-        <action
-            android:id="@+id/action_mainFragment_to_emptyFragment"
-            app:destination="@id/emptyFragment" />
-    </fragment>
+    app:startDestination="@id/ticketsFragment">
 
     <fragment
         android:id="@+id/emptyFragment"
         android:name="searchtickets.app.presentation.ui.fragments.EmptyFragment"
         android:label="fragment_empty"
         tools:layout="@layout/fragment_empty" />
+
     <fragment
         android:id="@+id/ticketsFragment"
         android:name="searchtickets.app.presentation.ui.fragments.TicketsFragment"
-        android:label="TicketsFragment" />
+        android:label="TicketsFragment"
+        tools:layout="@layout/fragment_tickets">
+        <action
+            android:id="@+id/action_ticketsFragment_to_emptyFragment"
+            app:destination="@id/emptyFragment" />
+        <action
+            android:id="@+id/action_ticketsFragment_to_modalFragment"
+            app:destination="@id/modalFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/searchFragment"
         android:name="searchtickets.app.presentation.ui.fragments.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_showAllFragment"
+            app:destination="@id/showAllFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/modalFragment"
         android:name="searchtickets.app.presentation.ui.fragments.ModalFragment"
@@ -46,11 +42,19 @@
         <action
             android:id="@+id/action_modalFragment_to_emptyFragment"
             app:destination="@id/emptyFragment" />
+        <action
+            android:id="@+id/action_modalFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/showAllFragment"
         android:name="searchtickets.app.presentation.ui.fragments.ShowAllFragment"
         android:label="fragment_show_all"
-        tools:layout="@layout/fragment_show_all" />
+        tools:layout="@layout/fragment_show_all">
+        <action
+            android:id="@+id/action_showAllFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
 
 </navigation>

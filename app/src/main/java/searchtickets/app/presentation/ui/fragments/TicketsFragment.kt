@@ -1,27 +1,29 @@
 package searchtickets.app.presentation.ui.fragments
 
-import android.app.AlertDialog
-import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
-import android.text.Editable
-import android.text.InputType
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import searchtickets.app.R
 import searchtickets.app.databinding.FragmentTicketsBinding
 import searchtickets.app.presentation.ui.adapters.ImagesAdapter
 import searchtickets.app.presentation.ui.adapters.ImagesAdapterDataSource
 import searchtickets.app.presentation.ui.adapters.ImagesAdapterDataSourceImpl
+import searchtickets.app.presentation.ui.utils.AppTextWatcher
 import searchtickets.app.presentation.ui.utils.FragmentsHolder
+import searchtickets.app.presentation.ui.utils.LastValueManager
 import searchtickets.app.presentation.ui.viewModels.InfoViewModel
+import java.util.Locale
 
+@AndroidEntryPoint
 class TicketsFragment : Fragment(R.layout.fragment_tickets) {
     private var _binding: FragmentTicketsBinding? = null
     private val binding get() = _binding!!
@@ -42,50 +44,54 @@ class TicketsFragment : Fragment(R.layout.fragment_tickets) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        viewModel.fetchData(requireContext())
+        viewModel.fetchData()
         updateData()
         initUi()
     }
 
     private fun initUi() {
         configureTextFields()
-        showAdditionalInfo()
-        saveLastDepartureValue()
+        restoreLastValue()
+        saveLastValue()
+        openNextFr()
     }
 
-    private fun saveLastDepartureValue() {
-        with(binding) {
-            val sharedPrefs = context?.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-            val lastDepartureValue = sharedPrefs?.getString("last_departure_value", "Москва")
-            fromCityEdit.setText(lastDepartureValue)
-
-            fromCityEdit.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                    sharedPrefs?.edit()?.putString("last_departure_value", s.toString())?.apply()
-                }
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            })
+    private fun openNextFr() {
+        binding.toCityEdit.setOnClickListener {
+            if (findNavController().currentDestination?.id != R.id.modalFragment) {
+                findNavController().navigate(R.id.action_ticketsFragment_to_modalFragment)
+            }
         }
     }
 
-    private fun showAdditionalInfo() {
-        binding.toCityEdit.setOnClickListener {
-            val dialog = AlertDialog.Builder(context)
-                .setTitle("Information")
-                .setMessage("Тут может быть инфо о дате и времени отправления")
-                .setPositiveButton("OK") { _, _ -> }
-                .create()
-            dialog.show()
+    private fun restoreLastValue() {
+        with(binding) {
+            val lastDepartureValue = LastValueManager.getLastDepartureValue(requireContext())
+            val lastArrivalValue = LastValueManager.getLastArrivalValue(requireContext())
+            fromCityEdit.setText(lastDepartureValue)
+            toCityEdit.setText(lastArrivalValue)
+        }
+    }
+
+    private fun saveLastValue() {
+        with(binding) {
+            val lastDepartureValue = LastValueManager.getLastDepartureValue(requireContext())
+            val lastArrivalValue = LastValueManager.getLastArrivalValue(requireContext())
+            fromCityEdit.setText(lastDepartureValue)
+            toCityEdit.setText(lastArrivalValue)
+            fromCityEdit.addTextChangedListener(AppTextWatcher { editable ->
+                LastValueManager.saveLastDepartureValue(requireContext(), editable.toString())
+            })
+            toCityEdit.addTextChangedListener(AppTextWatcher { editable ->
+                LastValueManager.saveLastArrivalValue(requireContext(), editable.toString())
+            })
         }
     }
 
     private fun configureTextFields() {
         with(binding) {
-            fromCityEdit.inputType =
-                InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS or InputType.TYPE_TEXT_VARIATION_PERSON_NAME
-            toCityEdit.inputType =
-                InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS or InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+            val configuration = Configuration(resources.configuration)
+            configuration.setLocale(Locale("ru", "RU"))
         }
     }
 
